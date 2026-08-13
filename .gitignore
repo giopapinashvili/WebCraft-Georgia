@@ -1,0 +1,6 @@
+# deployment archive - rebuilt on demand, no need to version it
+webcraft-deploy.zip
+
+# OS noise
+.DS_Store
+Thumbs.db

@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="ka">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>კომერციული შეთავაზება — WebCraft Georgia</title>
+    <link rel="icon" type="image/png" href="images/icon-96.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Georgian:wght@400;500;700;800&display=swap"
+    />
+    <style>
+      :root {
+        --ink: #0a0c0f;
+        --ink-2: #0f1216;
+        --line: #22272f;
+        --fg: #eef1f5;
+        --muted: #99a3b0;
+        --dim: #7e8894;
+        --blue: #175fd6;
+        --blue-hi: #1e6ae8;
+        --paper: #ffffff;
+        --paper-ink: #14161a;
+        --paper-muted: #5a6068;
+        --paper-line: #dfe3e8;
+        --sans: "Noto Sans Georgian", "Segoe UI", system-ui, sans-serif;
+        --mono: "JetBrains Mono", "Noto Sans Georgian", ui-monospace, monospace;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--ink);
+        color: var(--fg);
+        font-family: var(--sans);
+        font-size: 15px;
+        line-height: 1.6;
+      }
+
+      /* ---------------- editor ---------------- */
+      .editor {
+        max-width: 940px;
+        margin: 0 auto;
+        padding: 28px 20px 8px;
+      }
+      .editor h1 {
+        font-size: 1.35rem;
+        letter-spacing: -0.02em;
+        margin: 0 0 4px;
+      }
+      .editor .hint {
+        color: var(--muted);
+        font-size: 0.86rem;
+        margin: 0 0 20px;
+      }
+      .grid {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        padding: 18px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: var(--ink-2);
+      }
+      .grid label {
+        display: grid;
+        gap: 5px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .grid :is(input, select, textarea) {
+        font: inherit;
+        color: var(--fg);
+        background: var(--ink);
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        padding: 9px 11px;
+        min-height: 42px;
+      }
+      .grid textarea { min-height: 76px; resize: vertical; line-height: 1.5; }
+      .grid .wide { grid-column: 1 / -1; }
+      .grid :is(input, select, textarea):focus-visible {
+        outline: none;
+        border-color: var(--blue-hi);
+        box-shadow: 0 0 0 3px rgb(30 106 232 / 0.25);
+      }
+      .bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+        margin: 16px 0 26px;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 44px;
+        padding: 0 18px;
+        border: 1px solid var(--blue);
+        border-radius: 7px;
+        background: var(--blue);
+        color: #fff;
+        font: inherit;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .btn:hover { background: var(--blue-hi); border-color: var(--blue-hi); }
+      .btn--ghost { background: transparent; border-color: var(--line); color: var(--fg); }
+      .btn--ghost:hover { background: #171b21; }
+      .bar .note { color: var(--dim); font-size: 0.8rem; }
+
+      /* ---------------- document ---------------- */
+      .sheet {
+        max-width: 940px;
+        margin: 0 auto 60px;
+        background: var(--paper);
+        color: var(--paper-ink);
+        border-radius: 14px;
+        padding: clamp(24px, 5vw, 56px);
+        box-shadow: 0 28px 64px -28px rgb(0 0 0 / 0.7);
+      }
+      .sheet a { color: inherit; }
+      .doc-head {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        align-items: flex-start;
+        justify-content: space-between;
+        padding-bottom: 22px;
+        border-bottom: 2px solid var(--paper-ink);
+      }
+      .doc-brand { display: flex; align-items: center; gap: 10px; }
+      .doc-brand img { width: 40px; height: 29px; object-fit: contain; }
+      .doc-brand b { font-size: 1.05rem; letter-spacing: -0.02em; }
+      .doc-brand span { display: block; font-size: 0.72rem; color: var(--paper-muted); font-weight: 400; }
+      .doc-meta { text-align: right; font-family: var(--mono); font-size: 0.76rem; color: var(--paper-muted); }
+      .doc-meta b { display: block; font-size: 0.95rem; color: var(--paper-ink); letter-spacing: -0.02em; }
+
+      .doc-title { margin: 30px 0 6px; font-size: clamp(1.4rem, 3.5vw, 1.9rem); letter-spacing: -0.02em; }
+      .doc-for { color: var(--paper-muted); margin: 0 0 26px; }
+      .doc-for b { color: var(--paper-ink); }
+
+      .doc-summary {
+        display: grid;
+        gap: 1px;
+        background: var(--paper-line);
+        border: 1px solid var(--paper-line);
+        border-radius: 9px;
+        overflow: hidden;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        margin-bottom: 30px;
+      }
+      .doc-summary div { background: #fff; padding: 13px 15px; }
+      .doc-summary dt { font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--paper-muted); }
+      .doc-summary dd { margin: 3px 0 0; font-family: var(--mono); font-size: 1.05rem; font-weight: 500; letter-spacing: -0.02em; }
+      .doc-summary dd.hot { color: #a35a06; }
+
+      .doc-sec { margin-bottom: 26px; }
+      .doc-sec h3 {
+        font-size: 0.74rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--paper-muted);
+        margin: 0 0 11px;
+        padding-bottom: 7px;
+        border-bottom: 1px solid var(--paper-line);
+      }
+      .doc-sec ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 7px; }
+      .doc-sec li { display: grid; grid-template-columns: 15px 1fr; gap: 9px; align-items: start; }
+      .doc-sec li::before {
+        content: "";
+        width: 7px; height: 7px; margin-top: 8px;
+        border-radius: 2px; background: var(--blue);
+      }
+      .doc-sec li.x::before { background: var(--paper-line); }
+      .doc-sec li.x { color: var(--paper-muted); }
+      .doc-sec p { margin: 0 0 8px; }
+
+      .doc-steps { display: grid; gap: 1px; background: var(--paper-line); border: 1px solid var(--paper-line); border-radius: 9px; overflow: hidden; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+      .doc-steps div { background: #fff; padding: 13px 15px; }
+      .doc-steps b { display: block; font-size: 0.9rem; }
+      .doc-steps span { font-family: var(--mono); font-size: 0.72rem; color: var(--paper-muted); }
+
+      .doc-total {
+        display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px;
+        padding: 18px 20px; border: 2px solid var(--paper-ink); border-radius: 9px; margin-bottom: 26px;
+      }
+      .doc-total .lbl { font-weight: 700; }
+      .doc-total .amt { font-family: var(--mono); font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 500; letter-spacing: -0.03em; }
+      .doc-total small { display: block; font-family: var(--sans); font-size: 0.76rem; font-weight: 400; color: var(--paper-muted); letter-spacing: 0; }
+
+      .doc-foot {
+        display: flex; flex-wrap: wrap; gap: 14px; justify-content: space-between;
+        padding-top: 20px; border-top: 1px solid var(--paper-line);
+        font-size: 0.8rem; color: var(--paper-muted);
+      }
+      .doc-foot b { color: var(--paper-ink); }
+
+      /* ---------------- print ---------------- */
+      @media print {
+        @page { size: A4; margin: 14mm; }
+        body { background: #fff; }
+        .editor, .bar, .noprint { display: none !important; }
+        .sheet { max-width: none; margin: 0; padding: 0; box-shadow: none; border-radius: 0; }
+        .doc-sec, .doc-summary, .doc-total, .doc-steps { break-inside: avoid; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="editor noprint">
+      <h1>კომერციული შეთავაზების გენერატორი</h1>
+      <p class="hint">
+        შეავსე ველები — დოკუმენტი ქვემოთ ავტომატურად განახლდება. მერე დააჭირე
+        „PDF-ად შენახვა" და აირჩიე „Save as PDF". კლიენტს უგზავნი PDF-ს.
+      </p>
+
+      <div class="grid">
+        <label class="wide">
+          კლიენტი / კომპანია
+          <input id="fClient" type="text" placeholder="შპს ლაუნჯ ანტიკო" />
+        </label>
+
+        <label>
+          პროექტის ტიპი
+          <select id="fType">
+            <option value="landing">Landing Page</option>
+            <option value="business" selected>ბიზნეს ვებსაიტი</option>
+            <option value="store">ონლაინ მაღაზია</option>
+            <option value="portfolio">პორტფოლიო საიტი</option>
+            <option value="seo">SEO &amp; ოპტიმიზაცია</option>
+            <option value="refresh">საიტის განახლება</option>
+          </select>
+        </label>
+
+        <label>
+          ღირებულება (₾)
+          <input id="fPrice" type="number" min="0" step="10" value="999" />
+        </label>
+
+        <label>
+          ვადა
+          <input id="fDays" type="text" value="7 სამუშაო დღე" />
+        </label>
+
+        <label>
+          შეთავაზების ნომერი
+          <input id="fNo" type="text" value="" />
+        </label>
+
+        <label>
+          ძალაშია
+          <input id="fValid" type="date" />
+        </label>
+
+        <label class="wide">
+          დამატებითი ფუნქციები (თითო ხაზზე ერთი — ცარიელი დატოვე თუ არაა)
+          <textarea id="fExtra" placeholder="ონლაინ გადახდა (TBC) — +499₾&#10;დამატებითი ენა (EN) — +400₾"></textarea>
+        </label>
+
+        <label class="wide">
+          შენიშვნა კლიენტისთვის (არასავალდებულო)
+          <textarea id="fNote" placeholder="ტექსტები და ფოტოები შენი მხრიდან — ვადის ათვლა მათი მიღების დღიდან იწყება."></textarea>
+        </label>
+      </div>
+
+      <div class="bar">
+        <button class="btn" type="button" onclick="window.print()">
+          PDF-ად შენახვა
+        </button>
+        <button class="btn btn--ghost" type="button" id="btnReset">გასუფთავება</button>
+        <span class="note">Ctrl+P → „Save as PDF" · A4</span>
+      </div>
+    </div>
+
+    <!-- ================= DOCUMENT ================= -->
+    <article class="sheet" id="sheet">
+      <header class="doc-head">
+        <div class="doc-brand">
+          <img src="images/mark.png" alt="" width="40" height="29" />
+          <div>
+            <b>WebCraft Georgia</b>
+            <span>AI-ით გაძლიერებული ვებ-სტუდია</span>
+          </div>
+        </div>
+        <div class="doc-meta">
+          <b id="oNo">№ 2026-001</b>
+          <span id="oDate">13.08.2026</span>
+        </div>
+      </header>
+
+      <h2 class="doc-title">კომერციული შეთავაზება</h2>
+      <p class="doc-for">ადრესატი: <b id="oClient">—</b></p>
+
+      <dl class="doc-summary">
+        <div><dt>სერვისი</dt><dd id="oType">ბიზნეს ვებსაიტი</dd></div>
+        <div><dt>ვადა</dt><dd id="oDays">7 სამუშაო დღე</dd></div>
+        <div><dt>ღირებულება</dt><dd class="hot" id="oPrice">999₾</dd></div>
+        <div><dt>პირველი წელი</dt><dd>საჩუქრად</dd></div>
+      </dl>
+
+      <section class="doc-sec">
+        <h3>რა შედის ფასში</h3>
+        <ul id="oIncl"></ul>
+      </section>
+
+      <section class="doc-sec" id="oExtraWrap" hidden>
+        <h3>დამატებითი ფუნქციები</h3>
+        <ul id="oExtra"></ul>
+      </section>
+
+      <section class="doc-sec">
+        <h3>რა არ შედის</h3>
+        <ul>
+          <li class="x">ტექსტების დაწერა (ცალკე შეთანხმებით)</li>
+          <li class="x">ფასიანი ფოტოები და შრიფტები</li>
+          <li class="x">ბრიფის მიღმა დამატებული ფუნქციები</li>
+          <li class="x">დომენის საფასური მე-2 წლიდან</li>
+        </ul>
+      </section>
+
+      <section class="doc-sec">
+        <h3>პროცესი</h3>
+        <div class="doc-steps">
+          <div><b>01 — ბრიფი</b><span>1 დღე</span></div>
+          <div><b>02 — დიზაინი</b><span>1-2 დღე</span></div>
+          <div><b>03 — დეველოპმენტი</b><span>ძირითადი ეტაპი</span></div>
+          <div><b>04 — გაშვება</b><span>1 დღე</span></div>
+        </div>
+      </section>
+
+      <div class="doc-total">
+        <span class="lbl">
+          ჯამური ღირებულება
+          <small>50% დაწყებისას · 50% გაშვებამდე</small>
+        </span>
+        <span class="amt" id="oTotal">999₾</span>
+      </div>
+
+      <section class="doc-sec">
+        <h3>პირობები</h3>
+        <p>
+          ვადის ათვლა იწყება ტექსტებისა და ფოტოების მიღების დღიდან. ფასში შედის
+          <b>2 რაუნდი შენიშვნა</b> კოდის დაწერის შემდეგ; დიზაინის ეტაპზე
+          ცვლილებები შეუზღუდავია. სრული გადახდის შემდეგ საიტი, კოდი და დომენი
+          შენი საკუთრებაა.
+        </p>
+        <p>
+          პირველი წელი — დომენი, ჰოსტინგი, SSL და ტექნიკური მხარდაჭერა —
+          ფასში შედის. მე-2 წლიდან მხარდაჭერა 49₾/თვე (ლენდინგი) ან 99₾/თვე
+          (ბიზნეს საიტი და მაღაზია). გაუქმება ნებისმიერ დროს.
+        </p>
+        <p id="oNoteWrap" hidden><b id="oNote"></b></p>
+        <p>
+          შეთავაზება ძალაშია <b id="oValid">—</b>-მდე. სრული პირობები:
+          webcraftgeorgia.pages.dev/terms.html
+        </p>
+      </section>
+
+      <footer class="doc-foot">
+        <span><b>WebCraft Georgia</b> · 555 53 31 08 · @webcraftgeorgia</span>
+        <span>webcraftgeorgia.pages.dev</span>
+      </footer>
+    </article>
+
+    <script>
+      const T = {
+        landing: {
+          name: "Landing Page", price: 249, days: "2-3 სამუშაო დღე",
+          incl: ["ერთგვერდიანი საიტი, 5-7 სექცია", "მობილურზე, ტაბლეტზე და დესკტოპზე მორგება",
+                 "საკონტაქტო ფორმა + WhatsApp ღილაკი", "Google Maps (თუ ლოკაცია გაქვს)",
+                 "ბაზისური SEO: meta, sitemap, robots, Schema", "Meta Pixel / Google Tag-ის მომზადება",
+                 "დომენი, ჰოსტინგი, SSL — პირველი წელი", "2 რაუნდი შენიშვნა"],
+        },
+        business: {
+          name: "ბიზნეს ვებსაიტი", price: 999, days: "7 სამუშაო დღე",
+          incl: ["4-8 გვერდი, ინდივიდუალური დიზაინი", "CMS — ტექსტს და ფოტოს თავად ცვლი",
+                 "მობილურზე, ტაბლეტზე და დესკტოპზე მორგება", "საკონტაქტო ფორმა + WhatsApp ღილაკი",
+                 "SEO: meta, Schema, sitemap, robots", "Google Analytics + Search Console",
+                 "დომენი, ჰოსტინგი, SSL — პირველი წელი", "2 რაუნდი შენიშვნა"],
+        },
+        store: {
+          name: "ონლაინ მაღაზია", price: 1499, days: "14 სამუშაო დღე",
+          incl: ["ბიზნეს ვებსაიტის ყველა პუნქტი", "პროდუქტების კატალოგი კატეგორიებით და ფილტრით",
+                 "კალათა და შეკვეთის სრული ციკლი", "ადმინ პანელი შეკვეთების მართვისთვის",
+                 "100-მდე პროდუქტის ატვირთვა", "Product Schema — ფასი და მარაგი Google-ში",
+                 "დომენი, ჰოსტინგი, SSL — პირველი წელი", "2 რაუნდი შენიშვნა"],
+        },
+        portfolio: {
+          name: "პორტფოლიო საიტი", price: 449, days: "4-5 სამუშაო დღე",
+          incl: ["3-5 გვერდი: გალერეა, ქეისები, ბიო, კონტაქტი", "ლაითბოქსი და მობილურზე სვაიპი",
+                 "40-მდე ფოტოს ოპტიმიზაცია და ატვირთვა", "სოციალური ბმულები",
+                 "ბაზისური SEO + ImageObject Schema", "დომენი, ჰოსტინგი, SSL — პირველი წელი",
+                 "2 რაუნდი შენიშვნა"],
+        },
+        seo: {
+          name: "SEO & ოპტიმიზაცია", price: 299, days: "2-4 სამუშაო დღე",
+          incl: ["ტექნიკური აუდიტი — ანგარიში ქართულად", "სისწრაფე: WebP, lazy loading, Core Web Vitals",
+                 "Meta ტეგები და Open Graph ყველა გვერდზე", "Schema markup (JSON-LD)",
+                 "sitemap.xml + robots.txt და Google-ში გაგზავნა", "Search Console + Analytics",
+                 "გატეხილი ბმულების გასწორება"],
+        },
+        refresh: {
+          name: "საიტის განახლება", price: 599, days: "5-7 სამუშაო დღე",
+          incl: ["არსებული საიტის აუდიტი და backup", "ვიზუალის განახლება თანამედროვე სტილზე",
+                 "მობილურის გასწორება", "სისწრაფის ოპტიმიზაცია",
+                 "301 გადამისამართებები — SEO წონა ინახება", "გატეხილი ბმულების შეკეთება",
+                 "2 რაუნდი შენიშვნა"],
+        },
+      };
+
+      const $ = (id) => document.getElementById(id);
+      const gel = (n) => Number(n || 0).toLocaleString("en-US") + "₾";
+      const dmy = (d) =>
+        `${String(d.getDate()).padStart(2, "0")}.${String(d.getMonth() + 1).padStart(2, "0")}.${d.getFullYear()}`;
+
+      // defaults
+      const today = new Date();
+      $("fValid").value = new Date(today.getTime() + 14 * 864e5)
+        .toISOString()
+        .slice(0, 10);
+      $("fNo").value =
+        `${today.getFullYear()}-` +
+        String(Math.floor(today.getTime() / 1e5) % 1000).padStart(3, "0");
+
+      let lastType = $("fType").value;
+
+      function render() {
+        const t = T[$("fType").value];
+
+        $("oNo").textContent = "№ " + ($("fNo").value || "—");
+        $("oDate").textContent = dmy(today);
+        $("oClient").textContent = $("fClient").value.trim() || "—";
+        $("oType").textContent = t.name;
+        $("oDays").textContent = $("fDays").value.trim() || t.days;
+        $("oPrice").textContent = gel($("fPrice").value);
+        $("oTotal").textContent = gel($("fPrice").value);
+
+        $("oIncl").innerHTML = t.incl.map((x) => `<li>${x}</li>`).join("");
+
+        const extra = $("fExtra").value
+          .split("\n")
+          .map((x) => x.trim())
+          .filter(Boolean);
+        $("oExtraWrap").hidden = extra.length === 0;
+        $("oExtra").innerHTML = extra.map((x) => `<li>${x}</li>`).join("");
+
+        const note = $("fNote").value.trim();
+        $("oNoteWrap").hidden = !note;
+        $("oNote").textContent = note;
+
+        const v = $("fValid").value;
+        $("oValid").textContent = v ? dmy(new Date(v)) : "—";
+      }
+
+      // switching type refreshes price/days defaults
+      $("fType").addEventListener("change", () => {
+        const t = T[$("fType").value];
+        $("fPrice").value = t.price;
+        $("fDays").value = t.days;
+        lastType = $("fType").value;
+        render();
+      });
+
+      document.querySelectorAll(".grid input, .grid select, .grid textarea")
+        .forEach((el) => el.addEventListener("input", render));
+
+      $("btnReset").addEventListener("click", () => {
+        $("fClient").value = "";
+        $("fExtra").value = "";
+        $("fNote").value = "";
+        render();
+      });
+
+      render();
+    </script>
+  </body>
+</html>

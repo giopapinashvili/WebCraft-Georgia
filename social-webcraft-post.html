@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="ka">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WebCraft Georgia Social Post</title>
+  <style>
+    @font-face {
+      font-family: "WebCraftGeo";
+      src: local("Segoe UI"), local("Noto Sans Georgian"), local("Arial");
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #0c111b;
+      font-family: "WebCraftGeo", "Segoe UI", sans-serif;
+    }
+
+    .post {
+      position: relative;
+      width: 1080px;
+      height: 1080px;
+      overflow: hidden;
+      color: #f7fbff;
+      background:
+        radial-gradient(circle at 78% 18%, rgba(31, 160, 255, 0.42), transparent 30%),
+        radial-gradient(circle at 19% 82%, rgba(255, 184, 65, 0.22), transparent 28%),
+        linear-gradient(135deg, #070a0f 0%, #0d1628 46%, #12315e 100%);
+    }
+
+    .grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px);
+      background-size: 72px 72px;
+      opacity: 0.7;
+    }
+
+    .shine {
+      position: absolute;
+      width: 680px;
+      height: 680px;
+      right: -190px;
+      top: 70px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(69, 164, 255, 0.34), rgba(69, 164, 255, 0.03) 58%, transparent 70%);
+      filter: blur(8px);
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      padding: 76px 76px 64px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      margin-bottom: 78px;
+    }
+
+    .brand img {
+      width: 76px;
+      height: 76px;
+      object-fit: contain;
+      filter: drop-shadow(0 14px 24px rgba(0, 143, 255, 0.24));
+    }
+
+    .brand-name {
+      font-size: 30px;
+      line-height: 1;
+      font-weight: 800;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .brand-sub {
+      margin-top: 8px;
+      color: #aeb9c8;
+      font-size: 19px;
+      font-weight: 600;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 46px;
+      align-items: center;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 610px;
+      font-size: 68px;
+      line-height: 1.08;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .blue {
+      color: #53a3ff;
+    }
+
+    .lead {
+      margin: 30px 0 0;
+      max-width: 610px;
+      color: #c8d2df;
+      font-size: 30px;
+      line-height: 1.48;
+      font-weight: 650;
+    }
+
+    .mockup {
+      position: relative;
+      height: 435px;
+      border-radius: 34px;
+      padding: 18px;
+      background: linear-gradient(145deg, rgba(255,255,255,0.28), rgba(255,255,255,0.07));
+      box-shadow: 0 32px 72px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.4);
+      transform: rotate(2deg);
+    }
+
+    .screen {
+      height: 100%;
+      overflow: hidden;
+      border-radius: 24px;
+      background: #f8fbff;
+      color: #101624;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.5);
+    }
+
+    .screen-top {
+      height: 58px;
+      background: #101624;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 24px;
+    }
+
+    .dot {
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: #ffb13b;
+    }
+
+    .dot:nth-child(2) {
+      background: #53a3ff;
+    }
+
+    .dot:nth-child(3) {
+      background: #6fe6b6;
+    }
+
+    .screen-body {
+      padding: 28px;
+    }
+
+    .mini-tag {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: #eaf3ff;
+      color: #226bc4;
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .mini-title {
+      margin-top: 24px;
+      font-size: 34px;
+      line-height: 1.14;
+      font-weight: 900;
+      color: #111827;
+    }
+
+    .mini-lines {
+      margin-top: 24px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .mini-line {
+      height: 15px;
+      border-radius: 999px;
+      background: #d8e2ef;
+    }
+
+    .mini-line:nth-child(1) {
+      width: 88%;
+    }
+
+    .mini-line:nth-child(2) {
+      width: 67%;
+    }
+
+    .mini-cards {
+      margin-top: 30px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .mini-card {
+      height: 72px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #edf5ff, #ffffff);
+      border: 1px solid #dbe8f5;
+    }
+
+    .services {
+      margin-top: auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      padding-top: 54px;
+    }
+
+    .service {
+      min-height: 128px;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 24px;
+      padding: 24px;
+      background: rgba(7, 10, 15, 0.43);
+      backdrop-filter: blur(16px);
+    }
+
+    .service-title {
+      font-size: 22px;
+      line-height: 1.25;
+      font-weight: 850;
+    }
+
+    .service-price {
+      margin-top: 16px;
+      color: #ffb13b;
+      font-size: 28px;
+      font-weight: 900;
+    }
+
+    .footer {
+      margin-top: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255,255,255,0.14);
+      color: #d7e1ec;
+      font-size: 25px;
+      font-weight: 750;
+    }
+
+    .cta {
+      color: #07101d;
+      background: #ffb13b;
+      border-radius: 999px;
+      padding: 18px 26px;
+      font-size: 24px;
+      font-weight: 900;
+      box-shadow: 0 16px 38px rgba(255, 177, 59, 0.27);
+    }
+  </style>
+</head>
+<body>
+  <main class="post" aria-label="WebCraft Georgia social post">
+    <div class="grid"></div>
+    <div class="shine"></div>
+    <section class="content">
+      <header class="brand">
+        <img src="images/webcraft-logo-symbol.png" alt="">
+        <div>
+          <div class="brand-name">WebCraft Georgia</div>
+          <div class="brand-sub">ვებსაიტები ბიზნესისთვის</div>
+        </div>
+      </header>
+
+      <div class="hero">
+        <div>
+          <h1>თანამედროვე ვებსაიტი <span class="blue">შენი ბიზნესისთვის</span></h1>
+          <p class="lead">სწრაფი, ლამაზი და მობილურზე მორგებული ვებსაიტები ხელმისაწვდომ ფასად.</p>
+        </div>
+
+        <aside class="mockup" aria-hidden="true">
+          <div class="screen">
+            <div class="screen-top">
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+            <div class="screen-body">
+              <span class="mini-tag">Responsive Design</span>
+              <div class="mini-title">შენი იდეა რეალურ ვებსაიტად</div>
+              <div class="mini-lines">
+                <div class="mini-line"></div>
+                <div class="mini-line"></div>
+              </div>
+              <div class="mini-cards">
+                <div class="mini-card"></div>
+                <div class="mini-card"></div>
+                <div class="mini-card"></div>
+                <div class="mini-card"></div>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <div class="services">
+        <div class="service">
+          <div class="service-title">Landing Page</div>
+          <div class="service-price">249₾</div>
+        </div>
+        <div class="service">
+          <div class="service-title">ბიზნეს ვებსაიტი</div>
+          <div class="service-price">999₾</div>
+        </div>
+        <div class="service">
+          <div class="service-title">ონლაინ მაღაზია</div>
+          <div class="service-price">1499₾</div>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <div>webcraftgeorgia.pages.dev</div>
+        <div class="cta">მოგვწერე დღეს</div>
+      </footer>
+    </section>
+  </main>
+</body>
+</html>

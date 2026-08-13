@@ -1,0 +1,22 @@
+﻿:root {
+  --page-bg: #02060c;
+  --text-main: #ffffff;
+  --text-muted: rgba(226, 236, 250, 0.72);
+  --blue: #1a8cff;
+  --green: #3dffa0;
+  --panel: rgba(10, 20, 34, 0.84);
+}
+
+html,
+body {
+  min-height: 100%;
+  background: var(--page-bg);
+  font-family: "Noto Sans Georgian", system-ui, sans-serif;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: hidden;
+}
