@@ -562,12 +562,17 @@
     color: var(--marker);
   }
 
-  /* --- Header CTA --- */
-  .header-cta {
+  /* --- Header CTA ---
+     Scoped to .site-header on purpose. This button also carries .btn, and
+     `.btn { display: inline-flex }` is defined further down the file — with
+     equal weight the later rule wins, so a bare `.header-cta { display: none }`
+     lost and the button stayed on screen at phone widths, covering the burger.
+     The extra ancestor gives this rule the weight to hold. */
+  .site-header .header-cta {
     display: none;
   }
   @media (min-width: 980px) {
-    .header-cta {
+    .site-header .header-cta {
       display: inline-flex;
     }
   }
@@ -4342,6 +4347,20 @@
   margin: 0 0 0.9rem;
   align-self: flex-start;
 }
-@media (max-width: 980px) {
+
+/* The header holds only the brand and the burger below 980px, so there is
+   room for the switcher on tablets and normal phones. On the narrowest
+   screens the brand text alone nearly fills the bar, so below 480px the
+   switcher lives in the drawer instead.
+
+   Note the 479.98px: writing max-width:480px here while another rule uses
+   min-width:480px would make both apply at exactly 480px. That exact
+   mistake at 980px briefly left no way to change language at that one
+   width — desktop mode had started, but the switcher was still hidden. */
+@media (max-width: 479.98px) {
   .site-header .lang-switch { display: none; }
+}
+@media (max-width: 700px) {
+  .site-header .lang-switch { margin-inline-start: 0.3rem; padding: 0.14rem; }
+  .site-header .lang-switch a { padding: 0.28rem 0.4rem; font-size: 0.64rem; }
 }

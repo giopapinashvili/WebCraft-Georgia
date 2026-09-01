@@ -13,6 +13,77 @@
   const PHONE_WA = "995555533108";
   const PHONE_TEXT = "555 53 31 08";
 
+  /* --------------------------------------------------------- 0. LANGUAGE
+     One shared script serves the Georgian, English and Russian pages, so
+     every user-facing string lives here and is picked by the page's own
+     lang attribute. Adding a language means adding a column below — no
+     second copy of this file to keep in sync. */
+  const LANG = (() => {
+    const l = (document.documentElement.lang || "ka").slice(0, 2).toLowerCase();
+    return ["ka", "en", "ru"].includes(l) ? l : "ka";
+  })();
+
+  const STRINGS = {
+    copied:        { ka: "დაკოპირდა",              en: "Copied",              ru: "Скопировано" },
+    numberIs:      { ka: "ნომერი",                 en: "Number",              ru: "Номер" },
+    newRequest:    { ka: "ახალი მოთხოვნა — webcraftgeorgia.ge",
+                     en: "New enquiry — webcraftgeorgia.ge",
+                     ru: "Новая заявка — webcraftgeorgia.ge" },
+    fName:         { ka: "სახელი",                 en: "Name",                ru: "Имя" },
+    fContact:      { ka: "კონტაქტი",               en: "Contact",             ru: "Контакт" },
+    fService:      { ka: "სერვისი",                en: "Service",             ru: "Услуга" },
+    fBudget:       { ka: "ბიუჯეტი",                en: "Budget",              ru: "Бюджет" },
+    fProject:      { ka: "პროექტი:",               en: "Project:",            ru: "Проект:" },
+    errFields:     { ka: "შეავსე მონიშნული ველები.",
+                     en: "Please fill in the marked fields.",
+                     ru: "Заполните отмеченные поля." },
+    okSent:        { ka: "გაიგზავნა. პასუხს 24 საათში მიიღებ.",
+                     en: "Sent. You'll get a reply within 24 hours.",
+                     ru: "Отправлено. Ответ получите в течение 24 часов." },
+    okWhatsApp:    { ka: "WhatsApp გაიხსნა — დააჭირე გაგზავნას.",
+                     en: "WhatsApp is open — press send.",
+                     ru: "WhatsApp открыт — нажмите «отправить»." },
+    errAuto:       { ka: "ავტომატური გაგზავნა ვერ მოხერხდა — WhatsApp გაიხსნა.",
+                     en: "Automatic sending failed — WhatsApp is open instead.",
+                     ru: "Автоматическая отправка не удалась — открыт WhatsApp." },
+    customDesign:  { ka: "ინდივიდუალური დიზაინი",  en: "Custom design",       ru: "Индивидуальный дизайн" },
+    calcHello:     { ka: "გამარჯობა! კალკულატორით დავითვალე:",
+                     en: "Hello! I worked this out with the calculator:",
+                     ru: "Здравствуйте! Я посчитал через калькулятор:" },
+    calcTotal:     { ka: "სულ",                    en: "Total",               ru: "Итого" },
+    calcTerm:      { ka: "ვადა",                   en: "timeline",            ru: "срок" },
+    calcOutro:     { ka: "მაინტერესებს დეტალები.",
+                     en: "I'd like to know more.",
+                     ru: "Хотел бы узнать подробности." },
+    business:      { ka: "ბიზნეს ვებსაიტი",        en: "Business Website",    ru: "Бизнес-сайт" },
+    store:         { ka: "ონლაინ მაღაზია",         en: "Online Store",        ru: "Интернет-магазин" },
+    addSeo:        { ka: "Advanced SEO & კონტენტი", en: "Advanced SEO & content", ru: "Advanced SEO и контент" },
+    addLang:       { ka: "დამატებითი ენა",         en: "Additional language", ru: "Дополнительный язык" },
+    addBlog:       { ka: "ბლოგი / სიახლეები",      en: "Blog / news",         ru: "Блог / новости" },
+    addBook:       { ka: "ჯავშნის სისტემა",        en: "Booking system",      ru: "Система бронирования" },
+    addPay:        { ka: "ონლაინ გადახდა",         en: "Online payment",      ru: "Онлайн-оплата" },
+    /* matches the label printed next to the checkbox on the page — the two
+       used to disagree, which looked like a bug in the quote the client sends */
+    addAdmin:      { ka: "CRM / შიდა სისტემა",     en: "CRM / internal system", ru: "CRM / внутренняя система" },
+  };
+
+  const t = (key) => (STRINGS[key] && STRINGS[key][LANG]) || STRINGS[key]?.ka || "";
+
+  /* Russian needs three forms for "day"; English two; Georgian one. Getting
+     this wrong is the kind of thing a native speaker notices immediately. */
+  const dayWord = (n) => {
+    if (LANG === "ka") return "დღე";
+    if (LANG === "en") return n === 1 ? "day" : "days";
+    const a = Math.abs(n) % 100;
+    const b = a % 10;
+    if (a > 10 && a < 20) return "дней";
+    if (b > 1 && b < 5) return "дня";
+    if (b === 1) return "день";
+    return "дней";
+  };
+  /* For ranges like "2-3" the last number governs the form. */
+  const days = (n) => `${n} ${dayWord(Number(String(n).split("-").pop()))}`;
+
   /* ----------------------------------------------------------- 1. HEADER */
   const header = $(".site-header");
   if (header) {
@@ -127,9 +198,9 @@
         document.execCommand("copy");
         ta.remove();
       }
-      if (copyNote) copyNote.textContent = `დაკოპირდა — ${PHONE_TEXT}`;
+      if (copyNote) copyNote.textContent = `${t("copied")} — ${PHONE_TEXT}`;
     } catch {
-      if (copyNote) copyNote.textContent = `ნომერი: ${PHONE_TEXT}`;
+      if (copyNote) copyNote.textContent = `${t("numberIs")}: ${PHONE_TEXT}`;
     }
   }
 
@@ -233,14 +304,14 @@
 
     const buildMessage = (data) => {
       const lines = [
-        "ახალი მოთხოვნა — webcraftgeorgia.ge",
+        t("newRequest"),
         "",
-        `სახელი: ${data.name}`,
-        `კონტაქტი: ${data.contact}`,
-        data.service ? `სერვისი: ${data.service}` : "",
-        data.budget ? `ბიუჯეტი: ${data.budget}` : "",
+        `${t("fName")}: ${data.name}`,
+        `${t("fContact")}: ${data.contact}`,
+        data.service ? `${t("fService")}: ${data.service}` : "",
+        data.budget ? `${t("fBudget")}: ${data.budget}` : "",
         "",
-        "პროექტი:",
+        t("fProject"),
         data.message,
       ];
       return lines.filter(Boolean).join("\n");
@@ -250,7 +321,7 @@
       e.preventDefault();
 
       if (!form.reportValidity()) {
-        say("შეავსე მონიშნული ველები.", "err");
+        say(t("errFields"), "err");
         return;
       }
 
@@ -278,16 +349,16 @@
           });
           if (!res.ok) throw new Error(String(res.status));
           form.reset();
-          say("გაიგზავნა. პასუხს 24 საათში მიიღებ.", "ok");
+          say(t("okSent"), "ok");
         } else {
           const text = encodeURIComponent(buildMessage(data));
           window.open(`https://wa.me/${PHONE_WA}?text=${text}`, "_blank", "noopener");
-          say("WhatsApp გაიხსნა — დააჭირე გაგზავნას.", "ok");
+          say(t("okWhatsApp"), "ok");
         }
       } catch {
         const text = encodeURIComponent(buildMessage(data));
         window.open(`https://wa.me/${PHONE_WA}?text=${text}`, "_blank", "noopener");
-        say("ავტომატური გაგზავნა ვერ მოხერხდა — WhatsApp გაიხსნა.", "err");
+        say(t("errAuto"), "err");
       } finally {
         submitBtn && (submitBtn.disabled = false);
       }
@@ -310,9 +381,9 @@
 
   /* ------------------------------------------------ 7b. PRICE COMPARISON */
   const MARKET = {
-    landing: { price: 1500, days: 14, ours: 249, oursDays: "2-3 დღე", d: 3 },
-    business: { price: 5000, days: 30, ours: 999, oursDays: "7 დღე", d: 7 },
-    store: { price: 8000, days: 55, ours: 1499, oursDays: "14 დღე", d: 14 },
+    landing: { price: 1500, days: 14, ours: 249, oursDays: days("2-3"), d: 3 },
+    business: { price: 5000, days: 30, ours: 999, oursDays: days(7), d: 7 },
+    store: { price: 8000, days: 55, ours: 1499, oursDays: days(14), d: 14 },
   };
   const gel = (n) => `${Math.round(n).toLocaleString("en-US")}₾`;
 
@@ -336,7 +407,7 @@
 
     const paintSim = (key) => {
       const m = MARKET[key];
-      sim.oldDays.textContent = `${m.days} დღე`;
+      sim.oldDays.textContent = days(m.days);
       sim.oldPrice.textContent = `${m.price.toLocaleString("en-US")} ₾`;
       sim.newDays.textContent = m.oursDays;
       sim.newPrice.textContent = `${m.ours.toLocaleString("en-US")} ₾`;
@@ -345,7 +416,7 @@
       sim.newDaysBar.style.setProperty("--w", pct(m.d, m.days));
       sim.newPriceBar.style.setProperty("--w", pct(m.ours, m.price));
       sim.save.textContent = `+ ${gel(m.price - m.ours)}`;
-      sim.saveDays.textContent = `${m.days - m.d} დღე`;
+      sim.saveDays.textContent = days(m.days - m.d);
     };
 
     $$('input[name="sim"]').forEach((r) =>
@@ -359,18 +430,18 @@
   if (calc) {
     const BASE = {
       landing: { price: 249, days: 3, label: "Landing Page" },
-      business: { price: 999, days: 7, label: "ბიზნეს ვებსაიტი" },
-      store: { price: 1499, days: 14, label: "ონლაინ მაღაზია" },
+      business: { price: 999, days: 7, label: t("business") },
+      store: { price: 1499, days: 14, label: t("store") },
     };
     // Only the payment gateway adds real waiting time (bank approval).
     // Everything else is +1 day of work.
     const ADDONS = {
-      seo: { label: "Advanced SEO & კონტენტი", price: 299, days: 1 },
-      lang: { label: "დამატებითი ენა", pct: 0.4, days: 1 },
-      blog: { label: "ბლოგი / სიახლეები", price: 199, days: 1 },
-      book: { label: "ჯავშნის სისტემა", price: 399, days: 1 },
-      pay: { label: "ონლაინ გადახდა", price: 499, days: 3 },
-      admin: { label: "ადმინ პანელი / CRM", price: 599, days: 1 },
+      seo: { label: t("addSeo"), price: 299, days: 1 },
+      lang: { label: t("addLang"), pct: 0.4, days: 1 },
+      blog: { label: t("addBlog"), price: 199, days: 1 },
+      book: { label: t("addBook"), price: 399, days: 1 },
+      pay: { label: t("addPay"), price: 499, days: 3 },
+      admin: { label: t("addAdmin"), price: 599, days: 1 },
     };
 
     const out = {
@@ -388,14 +459,14 @@
       const custom = calc.elements.cdesign.value === "custom";
 
       let price = base.price;
-      let days = base.days;
+      let totalDays = base.days;
       const lines = [[base.label, gel(base.price)]];
 
       if (custom) {
         const add = base.price * 0.4;
         price += add;
-        days += 1;
-        lines.push(["ინდივიდუალური დიზაინი", `+${gel(add)}`]);
+        totalDays += 1;
+        lines.push([t("customDesign"), `+${gel(add)}`]);
       }
 
       $$('input[name="addon"]:checked', calc).forEach((cb) => {
@@ -403,14 +474,14 @@
         if (!a) return;
         const add = a.pct ? base.price * a.pct : a.price;
         price += add;
-        days += a.days;
+        totalDays += a.days;
         lines.push([a.label, `+${gel(add)}`]);
       });
 
       const market = MARKET[type].price * (price / base.price);
 
       out.total.textContent = Math.round(price).toLocaleString("en-US");
-      out.days.textContent = `${days} დღე`;
+      out.days.textContent = days(totalDays);
       out.market.textContent = gel(market);
       out.saving.textContent = gel(market - price);
       out.lines.innerHTML = lines
@@ -421,9 +492,9 @@
         .join("");
 
       const msg =
-        `გამარჯობა! კალკულატორით დავითვალე:\n\n` +
+        `${t("calcHello")}\n\n` +
         lines.map(([k, v]) => `• ${k} — ${v}`).join("\n") +
-        `\n\nსულ: ${gel(price)} · ვადა ${days} დღე\n\nმაინტერესებს დეტალები.`;
+        `\n\n${t("calcTotal")}: ${gel(price)} · ${t("calcTerm")} ${days(totalDays)}\n\n${t("calcOutro")}`;
       out.cta.href = `https://wa.me/${PHONE_WA}?text=${encodeURIComponent(msg)}`;
       out.cta.target = "_blank";
       out.cta.rel = "noopener";
