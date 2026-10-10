@@ -4364,3 +4364,176 @@
   .site-header .lang-switch { margin-inline-start: 0.3rem; padding: 0.14rem; }
   .site-header .lang-switch a { padding: 0.28rem 0.4rem; font-size: 0.64rem; }
 }
+
+/* ==========================================================================
+   WORK — real phone screenshots (replace the drawn browser mockups)
+   ========================================================================== */
+@layer components {
+  .shots {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding: clamp(0.75rem, 2.5vw, 1.5rem) 0 clamp(0.5rem, 1.5vw, 1rem);
+    border-radius: var(--r-lg);
+    color: inherit;
+    text-decoration: none;
+    isolation: isolate;
+  }
+  .shots::before {
+    content: "";
+    position: absolute;
+    inset: 14% 10% 2%;
+    z-index: -1;
+    border-radius: 50%;
+    background: radial-gradient(
+      closest-side,
+      color-mix(in oklab, var(--shot-glow, var(--accent)) 30%, transparent),
+      transparent
+    );
+    filter: blur(22px);
+    opacity: 0.85;
+  }
+  .phone {
+    position: relative;
+    display: block;
+    flex: none;
+    inline-size: clamp(128px, 40%, 224px);
+    padding: 6px;
+    border-radius: 30px;
+    background: linear-gradient(160deg, #30343c, #0b0d10 58%);
+    box-shadow:
+      inset 0 0 0 1px rgb(255 255 255 / 0.12),
+      0 0 0 1px rgb(0 0 0 / 0.55),
+      0 30px 60px -28px rgb(0 0 0 / 0.75);
+  }
+  .phone img {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    aspect-ratio: 469 / 834;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 24px;
+    background: #0b0d10;
+  }
+  .phone--back {
+    margin-inline-end: -12%;
+    margin-block-end: 8%;
+    rotate: -6deg;
+    scale: 0.9;
+    filter: brightness(0.82) saturate(0.92);
+  }
+  .phone--front {
+    z-index: 1;
+    rotate: 2deg;
+  }
+  .shots:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+  }
+
+  /* the two notebooks, side by side */
+  .shots--pair {
+    gap: clamp(0.9rem, 3.5vw, 1.75rem);
+    align-items: flex-start;
+  }
+  .app-shot {
+    display: grid;
+    justify-items: center;
+    gap: 0.75rem;
+    inline-size: clamp(132px, 44%, 214px);
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+  .app-shot .phone {
+    inline-size: 100%;
+  }
+  .app-shot:nth-child(2) {
+    margin-block-start: clamp(1rem, 4vw, 2.25rem);
+  }
+  .app-shot-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: clamp(0.7rem, 2.6vw, 0.78rem);
+    font-weight: 600;
+    text-align: center;
+  }
+  .app-shot-label svg {
+    inline-size: 0.8em;
+    block-size: 0.8em;
+    flex: none;
+  }
+  .app-shot:hover .app-shot-label,
+  .app-shot:focus-visible .app-shot-label {
+    color: var(--text);
+  }
+  .app-shot:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 6px;
+    border-radius: 18px;
+  }
+
+  .project .connects {
+    display: grid;
+    gap: 0.7rem;
+    margin-block-start: 1rem;
+    padding: 0;
+    list-style: none;
+  }
+  .project .connects li {
+    position: relative;
+    padding: 0.75rem 0.9rem 0.75rem 2.6rem;
+    border: 1px solid var(--rule);
+    border-radius: var(--r-md, 12px);
+    background: color-mix(in oklab, var(--accent) 6%, var(--bg));
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .project .connects li::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: 0.9rem;
+    inset-block-start: 0.95rem;
+    inline-size: 1.05rem;
+    block-size: 1.05rem;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle, var(--accent) 0 32%, transparent 34%),
+      color-mix(in oklab, var(--accent) 22%, transparent);
+  }
+  .project .connects strong {
+    color: var(--text);
+  }
+  .project p.desc--after {
+    margin-block-start: 0.9rem;
+  }
+  .project--apps .go {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .phone {
+      transition:
+        translate var(--dur-3) var(--ease),
+        rotate var(--dur-3) var(--ease);
+    }
+    .project:hover .phone--front,
+    .shots:focus-visible .phone--front {
+      translate: 0 -6px;
+      rotate: 0deg;
+    }
+    .project:hover .phone--back,
+    .shots:focus-visible .phone--back {
+      translate: -4px -2px;
+      rotate: -8deg;
+    }
+    .app-shot:hover .phone,
+    .app-shot:focus-visible .phone {
+      translate: 0 -6px;
+    }
+  }
+}
